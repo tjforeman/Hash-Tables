@@ -8,6 +8,7 @@ class LinkedPair:
         self.next = None
 
 class HashTable:
+    
     '''
     A hash table that with `capacity` buckets
     that accepts string keys
