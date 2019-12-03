@@ -115,16 +115,6 @@ class HashTable:
 
         self.storage = new_storage
 
-        # storage = self.storage
-        # self.capacity *= 2 
-        # self.storage = [None] * self.capacity
-
-        # for i in storage:
-        #     current = i
-        #     while current != None:
-        #         self.insert(current.key, current.value)
-        #         current = current.next
-
 
 
 
