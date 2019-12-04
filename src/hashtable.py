@@ -54,10 +54,17 @@ class HashTable:
 
         i = self._hash_mod(key)
         kvp = LinkedPair(key, value)
+        current = self.storage[i]
 
-        if self.storage[i] != None:
-            print("Error: collision")
-        self.storage[i] = kvp
+        if current != None:
+            if current.key == key:
+                current.value = value
+            else:
+                while current.next:
+                    current = current.next
+            current.next = kvp
+        else:
+            self.storage[i] = kvp
 
 
     def remove(self, key):
@@ -74,9 +81,8 @@ class HashTable:
         if current == None:
             print('The given key does not exist')
         else:
-            current = None
-
-
+            self.storage[i] = None
+                          
     def retrieve(self, key):
         '''
         Retrieve the value stored with the given key.
@@ -88,16 +94,12 @@ class HashTable:
         i = self._hash_mod(key)
         current = self.storage[i]
         if current != None:
-            if current.key == key:
-                return current.value
-            else:
-                print(f'warning: key doesnt match')
-                return None
-        else:
-            return
-        
-
-
+            while current:
+                if current.key != key:
+                    current = current.next
+                else:
+                    return current.value
+                
     def resize(self):
         '''
         Doubles the capacity of the hash table and
@@ -105,15 +107,20 @@ class HashTable:
 
         Fill this in.
         '''
-        self.capacity += 2
-        new_storage = [None] * self.capacity
 
-        for bucket_item in self.storage:
-            if bucket_item != None:
-                new_index = self._hash_mod(bucket_item.key)
-                new_storage[new_index] = LinkedPair(bucket_item.key, bucket_item.value)
+        storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
 
-        self.storage = new_storage
+        for i in storage:
+            if i != None:
+                current = i
+            self.insert(current.key, current.value)
+            new_kvp = current.next
+            while current.next != None:
+                self.insert(current.next.key, current.next.value)
+                current = new_kvp
+                new_kvp = current.next
 
 
 
