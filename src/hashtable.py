@@ -51,8 +51,20 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
 
+        i = self._hash_mod(key)
+        kvp = LinkedPair(key, value)
+        current = self.storage[i]
+
+        if current != None:
+            if current.key == key:
+                current.value = value
+            else:
+                while current.next:
+                    current = current.next
+            current.next = kvp
+        else:
+            self.storage[i] = kvp
 
 
     def remove(self, key):
@@ -63,9 +75,14 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        i = self._hash_mod(key)
+        current = self.storage[i]
 
-
+        if current == None:
+            print('The given key does not exist')
+        else:
+            self.storage[i] = None
+                          
     def retrieve(self, key):
         '''
         Retrieve the value stored with the given key.
@@ -74,9 +91,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
-
+        i = self._hash_mod(key)
+        current = self.storage[i]
+        if current != None:
+            while current:
+                if current.key != key:
+                    current = current.next
+                else:
+                    return current.value
+                
     def resize(self):
         '''
         Doubles the capacity of the hash table and
@@ -84,7 +107,21 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+
+        storage = self.storage
+        self.capacity *= 2
+        self.storage = [None] * self.capacity
+
+        for i in storage:
+            if i != None:
+                current = i
+            self.insert(current.key, current.value)
+            new_kvp = current.next
+            while current.next != None:
+                self.insert(current.next.key, current.next.value)
+                current = new_kvp
+                new_kvp = current.next
+
 
 
 
